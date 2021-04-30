@@ -1,199 +1,196 @@
-"General settings --- {{{
-set t_Co=256
-color jellybeans
-syntax on
-set nu
-set smartindent 
-set sw=4
-set ts=4
-set sts=4
-set expandtab
-set hlsearch
-set splitright
-set nocompatible
-set incsearch
-set laststatus=2
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+set encoding=utf-8
+"set fileencoding=utf-8
+set fileencodings=utf-8,gbk,utf-16le,cp1252,iso-8859-15,ucs-bom
+set backspace=2
+
+"syntax enable
+"set background=dark
+"colorscheme solarized
+
 set cursorline
-filetype off
-filetype plugin indent on   
-set completeopt=menu
-set backspace=indent,eol,start
-set tw=100
-set colorcolumn=100
-set wfh
-set wfw
+set colorcolumn=80
+highlight CursorLine cterm=NONE ctermbg=235
+highlight ColorColumn ctermbg=236
 
-" }}}
+" Indentation & Tabs
+set autoindent
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set smarttab
+set linebreak
+set cindent
+" Display & format
+set number
+set textwidth=80
+set wrapmargin=2
+set showmatch
+" Search
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+" Browse & Scroll
+set scrolloff=5
+set laststatus=2
 
-"Some autocmds --- {{{
-augroup filetype_c 
-    autocmd!
-    autocmd FileType c,cpp setlocal foldmethod=manual
-    autocmd FileType c,cpp noremap <buffer> <leader>c I//<esc>
-    autocmd FileType c,cpp noremap <buffer> <leader>d ^xx
-    "autocmd InsertLeave * if pumvisible()==0|pclose|endif
-augroup END
-augroup filetype_script 
-    autocmd!
-    autocmd FileType tcl,sh noremap <buffer> <leader>c I#<esc>
-    autocmd FileType tcl,sh noremap <buffer> <leader>d ^x<esc>
-augroup END
-augroup filetype_xml
-    autocmd!
-    "autocmd BufWritePre *.html :normal gg=G
-    autocmd FileType xml,html noremap <buffer> <leader>c I<!--><esc>A<--><esc>
-    autocmd FileType xml,html noremap <buffer> <leader>d ^5x$3h4x
-augroup END
-augroup filetype_vim
-    autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
-    autocmd FileType .vim noremap <buffer> <leader>c I"<esc>
-    autocmd FileType .vim noremap <buffer> <leader>d ^x<esc>
-augroup END
-augroup filetype_make
-    autocmd!
-    autocmd FileType make set noet
-augroup END
-augroup filetype_mkd
-    autocmd!
-    autocmd FileType mkd set tw=140
-    autocmd FileType mkd set colorcolumn=140
-augroup END
-augroup filetype_go
-    autocmd!
-    autocmd FileType go NeoCompleteEnable
-augroup END
-augroup filetype_yaml
-    autocmd!
-    autocmd FileType yaml set sts=2
-    autocmd FileType yaml set ts=2
-    autocmd FileType yaml set sw=2
-augroup END
-augroup HightTODO
-    autocmd!
-    autocmd WinEnter,VimEnter * :silent! call matchadd('airline_warning', '\(TODO:\?\)', -1)
-    autocmd WinEnter,VimEnter * :silent! call matchadd('DbgCurrent', '\(\(FIXME\)\|\(NOTE\)\):\?', -1)
-augroup END
-"}}}
+hi DiffAdd      gui=none    guifg=NONE          guibg=#bada9f
+hi DiffChange   gui=none    guifg=NONE          guibg=#e5d5ac
+hi DiffDelete   gui=bold    guifg=#ff8080       guibg=#ffb0b0
+hi DiffText     gui=none    guifg=NONE          guibg=#8cbee2
 
-"Some maps --- {{{
-let mapleader=","
-nnoremap tb :TagbarToggle<cr>
-nnoremap <F12> : AV<cr>
-nnoremap <leader>bf :buffers<cr>
-nnoremap <silent> <F3> :Grep<CR>
-"nnoremap <leader>F :/\v(^|:{2})start<cr>
-"nnoremap <leader>F :/\v(^|:{2})Start<cr>
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>g :silent exe "grep! -r " . shellescape(expand("<cWORD>")) . " ."<cr>:copen 5<cr>
-nnoremap <leader>pbr :execute "rightbelow vsplit " . bufname("#")<cr>
-nnoremap <leader>pbl :execute "leftabove vsplit " . bufname("#")<cr>
-nnoremap <leader>pba :execute "aboveleft split " . bufname("#")<cr>
-nnoremap <leader>pbb :execute "belowright split " . bufname("#")<cr>
-nnoremap <leader>bt :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr><cr>
-nnoremap <leader>ast :set tags+=/ws/phye/stl/tags<cr>
-nnoremap <F2> : set invpaste paste?<CR>
-set pastetoggle=<F2>
+execute pathogen#infect()
+syntax on
+filetype plugin indent on    " required
+let g:go_version_warning = 0
 
-inoremap jk <ESC>
-"inoremap <ESC> <nop>
-" }}}
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
-"Some commands --- {{{
-":ScratchBuffer makes current buffer disposable
-command! ScratchBuffer setlocal buftype=nofile bufhidden=hide noswapfile
-" }}}
+" clear trailing spaces
+nnoremap <F8> :let _s=@/<Bar>:%s/;\s\+$/;/e<Bar>:let @/=_s<Bar><CR>
 
-"Some Abbreviations --- {{{
-abbrev adn and
-abbrev teh the
-abbrev #i #include
-abbrev #d #define
-abbrev #p #!/usr/bin/perl
-" }}}
+"-- WinManager setting --
+let g:winManagerWindowLayout='FileExplorer' " 设置我们要管理的插件
+"let g:persistentBehaviour=0 " 如果所有编辑文件都关闭了，退出vim
+let g:winManagerWidth = 30
+"nmap wm :WMToggle<cr> 
 
-"Plugin specific --- {{{
+"-- NERDTree setting --
+nmap wm :NERDTreeToggle<CR>
+nmap wn :NERDTreeFocus<CR>
+"autocmd vimenter * NERDTree
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd StdinReadPre * let s:std_in=1
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | TlistToggle | endif
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 
-"pathogen related
-call pathogen#infect()
-"vundle related, vundle itself is not platform related ..
-"set rtp+=~/.vim/bundle/
-"call vundle#rc()
-"Bundle 'gmarik/vundle'
+"-- Tagbar setting --
+nmap tb :TagbarToggle<CR>
+"autocmd VimEnter * nested :Tagbar
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+    \ }
 
-"For SuperTab
-"let g:SuperTabRetainCompletionType=2
-"let g:SuperTabDefaultCompletionType="<C-X><C-O>"
+"-- ctrlp setting --
+set wildignore+=*/tmp/*,*/build/*,*/pack/*,*.so,*.swp,*.zip     " MacOSX/Linux
+"let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
-"For OmniCppComplete
-let OmniCpp_MayCompleteDot=1
-let OmniCpp_MayCompleteArrow=1
-let OmniCpp_MayCompleteScope=1
-let OmniCpp_SelectFirstItem=2
-let OmniCpp_NamespaceSearch=2
-let OmniCpp_ShowPrototypeInAbbr=1
-
-"window manager related
-let Tlist_Show_One_File=1
-let Tlist_Exit_OnlyWindow=1
-let g:winManagerWindowLayout='FileExplorer|TagList'
-nnoremap wm :WMToggle<cr>
-
-"cscope related
-set cscopequickfix=s-,c-,d-,i-,t-,e-
-set cspc=5
-
-"vim-airline
-let g:airline_powerline_fonts = 1
-"let g:airline#extensions#tabline#enabled = 1
-"
-"neocomplete related
-let g:neocomplete#enable_at_startup=1
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-autocmd FileType python setlocal omnifunc=jedi#completions
-let g:jedi#completions_enabled = 0
-let g:jedi#auto_vim_configuration = 0
-"let g:neocomplete#sources#omni#functions.javascript = [
-"            \ 'tern#Complete',
-"            \ ]
-"vim-easymotion
-let g:EasyMotion_leader_key = '<Space>'
-
-"emmet-vim
-"let g:user_emmet_install_global = 0
-"autocmd FileType html,css EmmetInstall
-let g:user_emmet_mode='a'
-
-"Powerful Unite!
-nnoremap <C-p> :Unite file_rec/async<cr>
-
-"delimitMate"
-let delimitMate_expand_cr = 1
-
-"fzf
-nnoremap <leader>f :Files<cr>
-nnoremap <leader>c :Commits<cr>
-" }}}
-
-"{{{ Misc functions
-nnoremap <C-W>O :call MaximizeToggle()<CR>
-nnoremap <C-W>o :call MaximizeToggle()<CR>
-nnoremap <C-W><C-O> :call MaximizeToggle()<CR>
-
-function! MaximizeToggle()
-    if exists("s:maximize_session")
-        exec "source " . s:maximize_session
-        call delete(s:maximize_session)
-        unlet s:maximize_session
-        let &hidden=s:maximize_hidden_save
-        unlet s:maximize_hidden_save
-    else
-        let s:maximize_hidden_save = &hidden
-        let s:maximize_session = tempname()
-        set hidden
-        exec "mksession! " . s:maximize_session
-        only
+"-- auto quit vim when only sidebar exits --
+function! CheckLeftBuffers()
+  if tabpagenr('$') == 1
+    let i = 1
+    while i <= winnr('$')
+      if getbufvar(winbufnr(i), '&buftype') == 'help' ||
+          \ getbufvar(winbufnr(i), '&buftype') == 'quickfix' ||
+          \ exists('t:NERDTreeBufName') &&
+          \   bufname(winbufnr(i)) == t:NERDTreeBufName ||
+          \ bufname(winbufnr(i)) == '__Tag_List__'
+        let i += 1
+      else
+        break
+      endif
+    endwhile
+    if i == winnr('$') + 1
+      qall
     endif
+    unlet i
+  endif
 endfunction
-"}}}
+autocmd BufEnter * call CheckLeftBuffers()
+
+"powerline
+"set guifont=PowerlineSymbols\ for\ Powerline
+"set nocompatible
+set t_Co=256
+let g:Powerline_symbols = 'fancy'
+
+"let &colorcolumn="80,".join(range(120,999),",")
+"hi ColorColumn ctermbg=233 guibg=#042028
+
+let g:go_fmt_options = ''
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+"启用vundle管理插件，必须"
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'preservim/nerdtree'
+
+"在此增加其他插件，安装的插件需要放在vundle#begin和vundle#end之间"
+"安装github上的插件格式为 Plugin '用户名/插件仓库名'"
+
+call vundle#end()              
+filetype plugin indent on      "加载vim自带和插件相应的语法和文件类型相关脚本，必须"
+
+nnoremap <SPACE> <Nop>
+let mapleader=" "
+
+Plugin 'easymotion/vim-easymotion'
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" Jump to anywhere you want with minimal keystrokes, with just one key binding.
+" `s{char}{label}`
+nmap s <Plug>(easymotion-overwin-f)
+" or
+" `s{char}{char}{label}`
+" Need one more keystroke, but on average, it may be more comfortable.
+nmap s <Plug>(easymotion-overwin-f2)
+
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
+let g:vim_markdown_edit_url_in = 'tab'
+
+Plugin 'vimwiki/vimwiki'
+
+augroup remember_folds
+    autocmd!
+    autocmd BufWinLeave * mkview
+    autocmd BufWinEnter * silent! loadview
+augroup END
+
+imap jj <ESC>
+imap kk <ESC>
